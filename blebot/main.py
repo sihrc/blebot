@@ -23,17 +23,19 @@ def on_ready():
 @client.event
 @asyncio.coroutine
 def on_message(message):
+    text = message.content
+    if not text.startswith("/"):
+        raise StopIteration
     try:
-        text = message.content
-        if text.startswith("/"):
-            results = PATTERN.match(text)
-            if results:
-                command = results.group(1)
-                action = results.group(2)
-                args = results.group(3)
-                result = handle_command(command, action, args, message)
-                if result:
-                    yield from client.send_message(message.channel, result)
+        results = PATTERN.match(text)
+        if results:
+            command = results.group(1)
+            action = results.group(2)
+            args = results.group(3)
+            result = handle_command(command, action, args, message)
+            if result:
+                yield from client.send_message(message.channel, result)
+
     except BlebotError as e:
         yield from client.send_message(message.channel, e)
     except Exception as e:
@@ -41,6 +43,8 @@ def on_message(message):
         yield from client.send_message(message.channel, "\nEncountered an interal server error:\n{error}".format(
             error=e
         ))
+    finally:
+        yield from client.delete_message(message)
 
 @client.event
 @asyncio.coroutine
@@ -51,12 +55,6 @@ def on_server_join(server):
 @asyncio.coroutine
 def on_server_available(server):
     create_database(server.id)
-
-
-@client.event
-@asyncio.coroutine
-def on_message_edit(before, after):
-    pass
 
 if __name__ == "__main__":
     initialize()
