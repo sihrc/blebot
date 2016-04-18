@@ -41,8 +41,8 @@ def handle_action(command, action, args, message, role=None):
     session.add(existing_role)
     session.commit()
 
-    return "\nEnabled {module} for channel #{channel}".format(module=args, channel=message.channel_mentions[0].name)
+    return [], "\nEnabled {module} for channel #{channel}".format(module=args, channel=message.channel_mentions[0].name)
 
 
 def handle_help():
-    return "\n`enable`: Enables a module for a particular channel.\n\ti.e. `/enable #[channel] [module]`"
+    return [], "\n`enable`: Enables a module for a particular channel.\n\ti.e. `/enable #[channel] [module]`"

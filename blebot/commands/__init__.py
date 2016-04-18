@@ -1,6 +1,6 @@
 from .config import COMMANDS, ALLOWED, DEFAULT_MESSAGE
-from ..utils.auth import check_role
 from . import rsvp, help, enable
+from ..utils.auth import check_role
 from ..utils.error import BlebotError
 
 def handle_command(command, action, args, message):
@@ -9,7 +9,7 @@ def handle_command(command, action, args, message):
     if args: args = args.strip()
 
     if command not in COMMANDS:
-        return DEFAULT_MESSAGE.format(command=command, commands=ALLOWED())
+        return [], DEFAULT_MESSAGE.format(command=command, commands=ALLOWED())
 
     if command and not action:
         return COMMANDS["help"].handle_action("help", command, action, message)

@@ -26,21 +26,29 @@ class Event(Base):
         self.channel = channel_id
 
     def format(self):
-        return "#{number} - **{name}** @ __{date}__. \n\t\t  Going:\t{going}\n\t\tMaybe:\t{maybe}\n".format(
+        return "#{number} - **{name}** @ {date} \n\t\t  Going:\t{going}\n\t\tMaybe:\t{maybe}\n".format(
             number=self.id,
             name=self.name,
             # date=self.date.strftime("%I:%M%p %Z on %a, %b %d"),
-            date=humanize.naturaldate(self.date),
-            going=len(self.going),
-            maybe=len(self.maybe)
+            date="{time} on {date} (__{human}__)".format(
+                time=self.date.strftime("%I:%M%p EST"),
+                date=humanize.naturaldate(self.date),
+                human=humanize.naturaltime(self.date)
+            ),
+            going=", ".join(self.going) if self.going else "No one",
+            maybe=", ".join(self.maybe) if self.maybe else "No one",
         )
 
     def details(self):
-        return "\nEVENT #{number} - **{name}** @ __{date}__ created by *{created}*\n  Going: \t{going}\nMaybe: \t{maybe}".format(
+        return "\nEVENT #{number} - **{name}** @ {date} created by *{created}*\n  Going: \t{going}\nMaybe: \t{maybe}".format(
             number=self.id,
             name=self.name,
             # date=self.date.strftime("%I:%M%p %Z on %a, %b %d"),
-            date=humanize.naturaldate(self.date),
+            date="{time} on {date} (__{human}__)".format(
+                time=self.date.strftime("%I:%M%p EST"),
+                date=humanize.naturaldate(self.date),
+                human=humanize.naturaltime(self.date)
+            ),
             going=", ".join(self.going) if self.going else "No one",
             maybe=", ".join(self.maybe) if self.maybe else "No one",
             created=self.created_by

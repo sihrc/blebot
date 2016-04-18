@@ -2,15 +2,13 @@
 
 import os, re
 
-import discord
 import asyncio
 
-from .commands import handle_command
-from .commands import initialize
+from .client import client
+from .commands import handle_command, initialize
 from .utils.error import BlebotError
 from .schema import create_database
 
-client = discord.Client()
 PATTERN = re.compile(r"/([a-z]*)\s*([^\s]*)\s*(.*)")
 
 @client.event
@@ -32,7 +30,9 @@ def on_message(message):
             command = results.group(1)
             action = results.group(2)
             args = results.group(3)
-            result = handle_command(command, action, args, message)
+            yields, result = handle_command(command, action, args, message)
+            for future in yields:
+                yield from future
             if result:
                 yield from client.send_message(message.channel, result)
 
@@ -43,8 +43,8 @@ def on_message(message):
         yield from client.send_message(message.channel, "\nEncountered an interal server error:\n{error}".format(
             error=e
         ))
-    finally:
-        yield from client.delete_message(message)
+    # finally:
+    #     yield from client.delete_message(message)
 
 @client.event
 @asyncio.coroutine
