@@ -56,6 +56,11 @@ def on_server_join(server):
 def on_server_available(server):
     create_database(server.id)
 
+@client.event
+@asyncio.coroutine
+def on_server_join(server):
+    create_database(server.id)
+
 if __name__ == "__main__":
     initialize()
     client.run(os.getenv("DISCORD_ACCESS_TOKEN"))

@@ -2,6 +2,7 @@ import traceback, re
 
 import parsedatetime
 from pytz import timezone
+from time import mktime
 import datetime
 import dateutil.parser
 from sqlalchemy import and_
@@ -79,16 +80,21 @@ def _create(action, args, message):
         raise BlebotError("\nPlease format your event description as [event name]@[date time]\n i.e. `/rsvp create Raid @ 4/16/2016 8:00pm EST`")
     name, time = args.split("@")
     try:
-        cal = parsedatetime.Calender()
-        date = cal.parse(time.strip())
+        cal = parsedatetime.Calendar()
+        time_struct, parse_status = cal.parse(time.strip())
+        date = datetime.datetime.fromtimestamp(mktime(time_struct))
+
     except:
+        traceback.print_exc()
         try:
             date = dateutil.parser.parse(time.strip())
         except:
+            traceback.print_exc()
             raise BlebotError("I couldn't understand that time.")
     try:
         date = EASTERN.localize(date)
     except:
+        traceback.print_exc()
         date = date.astimezone(EASTERN)
 
     event = Event(name.strip().upper(), date, message.author.name, message.channel.id, message.server.id)
@@ -97,8 +103,8 @@ def _create(action, args, message):
 
     return [], "\nYou created an event!\nEvent Number: *{number}*!\n**{name}** @ __{date}__".format(
         number=event.id,
-        name=name,
-        date=date.strftime("%I:%M%p EST on %a. %b %d"),
+        name=name.upper(),
+        date=date.strftime("%I:%M%p %Z on %a. %b %d"),
     )
 
 def _delete(action, args, message):

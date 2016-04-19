@@ -31,7 +31,7 @@ class Event(Base):
             name=self.name,
             # date=self.date.strftime("%I:%M%p %Z on %a, %b %d"),
             date="{time} on {date} (__{human}__)".format(
-                time=self.date.strftime("%I:%M%p EST"),
+                time=self.date.strftime("%I:%M%p %Z"),
                 date=humanize.naturaldate(self.date),
                 human=humanize.naturaltime(self.date)
             ),
@@ -45,7 +45,7 @@ class Event(Base):
             name=self.name,
             # date=self.date.strftime("%I:%M%p %Z on %a, %b %d"),
             date="{time} on {date} (__{human}__)".format(
-                time=self.date.strftime("%I:%M%p EST"),
+                time=self.date.strftime("%I:%M%p %Z"),
                 date=humanize.naturaldate(self.date),
                 human=humanize.naturaltime(self.date)
             ),
