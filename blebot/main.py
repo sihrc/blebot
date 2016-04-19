@@ -3,6 +3,7 @@
 import os, re
 
 import asyncio
+from psycopg2 import OperationalError
 
 from .client import client
 from .commands import handle_command, initialize
@@ -38,6 +39,10 @@ def on_message(message):
 
     except BlebotError as e:
         yield from client.send_message(message.channel, e)
+    except OperationalError as f:
+        if "database" in f.message and "does not exist" in f.message:
+            create_database(message.server.id)
+        on_message(message)
     except Exception as e:
         import traceback; traceback.print_exc()
         yield from client.send_message(message.channel, "\nEncountered an interal server error:\n{error}".format(

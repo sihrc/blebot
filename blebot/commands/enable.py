@@ -40,6 +40,7 @@ def handle_action(command, action, args, message, role=None):
     existing_role.modules.add(args)
     session.add(existing_role)
     session.commit()
+    session.close()
 
     return [], "\nEnabled {module} for channel #{channel}".format(module=args, channel=message.channel_mentions[0].name)
 

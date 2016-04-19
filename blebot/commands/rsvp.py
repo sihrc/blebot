@@ -100,6 +100,7 @@ def _create(action, args, message):
     event = Event(name.strip().upper(), date, message.author.name, message.channel.id, message.server.id)
     session.add(event)
     session.commit()
+    session.close()
 
     return [], "\nYou created an event!\nEvent Number: *{number}*!\n**{name}** @ __{date}__".format(
         number=event.id,
@@ -117,6 +118,8 @@ def _delete(action, args, message):
         raise BlebotError("Could not find event with number {number}".format(number=args))
     session.delete(event)
     session.commit()
+    session.close()
+
     return [], "\nYou've deleted the event!"
 
 def _list(action, args, message, limit=10):
@@ -137,6 +140,7 @@ def _details(action, args, message):
     if not event:
         raise BlebotError("Could not find event with number {number}".format(number=args))
 
+    session.close()
     return [], event.details()
 
 def _going(action, args, message):
@@ -152,6 +156,7 @@ def _going(action, args, message):
         event.maybe.remove(message.author.name)
     event.going.add(message.author.name)
     session.commit()
+    session.close()
     return [], "\n{name} registered as going!".format(name=message.author.name)
 
 
@@ -170,6 +175,7 @@ def _maybe(action, args, message):
 
     event.maybe.add(message.author.name)
     session.commit()
+    session.close()
     return [], "\n{name} registered as maybe attending!".format(name=message.author.name)
 
 def _ditch(action, args, message):
@@ -187,6 +193,7 @@ def _ditch(action, args, message):
     if message.author.name in event.going:
         event.going.remove(message.author.name)
     session.commit()
+    session.close()
     return [], "\n{name} ditched this event!".format(name=message.author.name)
 
 PRESTRING = "(^-^) BLEBot Upcoming Events List:"
@@ -200,12 +207,14 @@ def _topic(args, message):
         topic.modules.add("rsvp")
         session.add(topic)
         session.commit()
+        session.close()
         return [], "\nTopic updates for rsvp has been turned on!"
     elif args == "off":
         topic.modules.remove("rsvp")
         session.add(topic)
         session.commit()
         future = _edit_topic(message.channel, "")
+        session.close()
         return [future], "\nTopic updates for rsvp has been turned off!"
 
 def _edit_topic(channel, message, force=False):
