@@ -1,0 +1,12 @@
+dbdata:
+  image: blebot
+  volumes:
+    - /var/lib/postgresql
+  command: true
+
+db:
+  image: blebot
+  volumes_from:
+    - dbdata
+  ports:
+    - "5432:5432"
