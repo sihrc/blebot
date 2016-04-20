@@ -12,11 +12,11 @@ sudo apt-get install -y apparmor docker-engine
 sudo service docker start
 
 chmod og+X /root
-sudo apt-get install -y build-essential postgresql postgresql-contrib python-psycopg2
+sudo apt-get install -y build-essential postgresql postgresql-contrib
 sudo service postgresql start
 sudo -u postgres createuser -s blebot
 sudo -u postgres psql -c "ALTER USER blebot WITH PASSWORD 'blerocks';"
-
+sed -i -e "s/#listen_addresses = 'localhost'/listen_addresses = '172.17.0.0/16'/g" /etc/postgresql/9.3/main/postgresql.conf
 # Setup Script
 mkdir ~/blebot && cd ~/blebot && git init
 ./scripts/deploy.sh

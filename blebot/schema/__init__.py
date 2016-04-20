@@ -9,7 +9,7 @@ from sqlalchemy_utils import database_exists, create_database
 
 DATABASE = {
     'drivername': 'postgresql',
-    'host': os.getenv("LOCALHOST", "localhost"),
+    'host': "database",
     'port': '5432',
     'username': 'blebot',
     'password': 'blerocks',
