@@ -100,13 +100,14 @@ def _create(action, args, message):
     event = Event(name.strip().upper(), date, message.author.name, message.channel.id, message.server.id)
     session.add(event)
     session.commit()
-    session.close()
 
-    return [], "\nYou created an event!\nEvent Number: *{number}*!\n**{name}** @ __{date}__".format(
+    result = "\nYou created an event!\nEvent Number: *{number}*!\n**{name}** @ __{date}__".format(
         number=event.id,
         name=name.upper(),
         date=date.strftime("%I:%M%p %Z on %a. %b %d"),
     )
+    session.close()
+    return [], result
 
 def _delete(action, args, message):
     session = get_session(message.server.id)
@@ -140,8 +141,10 @@ def _details(action, args, message):
     if not event:
         raise BlebotError("Could not find event with number {number}".format(number=args))
 
+    result = event.details()
     session.close()
-    return [], event.details()
+
+    return [], result
 
 def _going(action, args, message):
     if not args:
