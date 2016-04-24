@@ -78,7 +78,7 @@ def _create(action, args, message):
         raise BlebotError("\nPlease format your event description as [event name]@[date time]\n i.e. `/rsvp create Raid @ 4/16/2016 8:00pm EST`")
     name, time = args.split("@")
     try:
-        date = dateutil.parser.parse(time.strip(), tzinfos=TZD)
+        date = dateutil.parser.parse(time.upper().strip(), tzinfos=TZD)
         utc_date = convert_to_utc(date)
     except:
         traceback.print_exc()

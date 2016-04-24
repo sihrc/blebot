@@ -5,7 +5,7 @@ def handle_help():
 """
 
 def handle_action(command, action, args, message, extras):
-    args = action
+    args = action + " " + args
     command = "rsvp"
     action = "create"
     return rsvp.handle_action(command, action, args, message, extras)
