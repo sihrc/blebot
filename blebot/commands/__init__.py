@@ -1,5 +1,5 @@
 from .config import COMMANDS, ALLOWED, DEFAULT_MESSAGE
-from . import rsvp, help, enable
+from . import rsvp, help, enable, rsvp_list, rsvp_ditch, rsvp_create
 from ..utils.auth import check_role
 from ..utils.error import BlebotError
 
@@ -11,7 +11,7 @@ def handle_command(command, action, args, message):
     if command not in COMMANDS:
         return [], DEFAULT_MESSAGE.format(command=command, commands=ALLOWED())
 
-    if command and not action:
+    if command and action == "help":
         return COMMANDS["help"].handle_action("help", command, action, message)
 
     if command in ["enable", "help"]:
@@ -25,6 +25,9 @@ def initialize():
         {
             "help": help,
             "enable": enable,
-            "rsvp": rsvp
+            "rsvp": rsvp,
+            "list": rsvp_list,
+            "ditch": rsvp_ditch,
+            "create": rsvp_create
         }
     )

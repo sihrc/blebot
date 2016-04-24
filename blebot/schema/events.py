@@ -1,8 +1,11 @@
 from sqlalchemy import Column, Integer, String, DateTime
 import humanize
+from pytz import timezone
 
 from . import  Base
 from .datatypes import ArraySet
+
+EASTERN = timezone('US/Eastern')
 
 class Event(Base):
     __tablename__ = "events"
@@ -25,31 +28,14 @@ class Event(Base):
         self.server = server_id
         self.channel = channel_id
 
-    def format(self):
-        return "#{number} - **{name}** @ {date} \n\t\t  Going:\t{going}\n\t\tMaybe:\t{maybe}\n".format(
-            number=self.id,
-            name=self.name,
-            # date=self.date.strftime("%I:%M%p %Z on %a, %b %d"),
-            date="{time} on {date} (__{human}__)".format(
-                time=self.date.strftime("%I:%M%p %Z"),
-                date=humanize.naturaldate(self.date),
-                human=humanize.naturaltime(self.date)
-            ),
-            going=", ".join(self.going) if self.going else "No one",
-            maybe=", ".join(self.maybe) if self.maybe else "No one",
-        )
-
     def details(self):
-        return "\nEVENT #{number} - **{name}** @ {date} created by *{created}*\n  Going: \t{going}\nMaybe: \t{maybe}".format(
+        return "\nEVENT #{number} - **{name}** at {date} created by *{created}*\n  Going: \t{going}".format(
             number=self.id,
             name=self.name,
-            # date=self.date.strftime("%I:%M%p %Z on %a, %b %d"),
-            date="{time} on {date} (__{human}__)".format(
-                time=self.date.strftime("%I:%M%p %Z"),
-                date=humanize.naturaldate(self.date),
+            date="{time} (__{human}__)".format(
+                time=EASTERN.localize(self.date).strftime("%I:%M%p %Z on %a. %b %d"),
                 human=humanize.naturaltime(self.date)
             ),
             going=", ".join(self.going) if self.going else "No one",
-            maybe=", ".join(self.maybe) if self.maybe else "No one",
             created=self.created_by
         )

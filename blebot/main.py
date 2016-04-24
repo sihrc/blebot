@@ -48,18 +48,8 @@ def on_message(message):
         yield from client.send_message(message.channel, "\nEncountered an interal server error:\n{error}".format(
             error=e
         ))
-    # finally:
+    # finally: # delete message as it comes in
     #     yield from client.delete_message(message)
-
-@client.event
-@asyncio.coroutine
-def on_server_join(server):
-    create_database(server.id)
-
-@client.event
-@asyncio.coroutine
-def on_server_available(server):
-    create_database(server.id)
 
 @client.event
 @asyncio.coroutine
