@@ -19,4 +19,8 @@ sudo -u postgres psql -c "ALTER USER blebot WITH PASSWORD 'blerocks';"
 sed -i -e "s/#listen_addresses = 'localhost'/listen_addresses = '172.17.0.0/16'/g" /etc/postgresql/9.3/main/postgresql.conf
 # Setup Script
 mkdir ~/blebot && cd ~/blebot && git init
+
+git config --global user.name "Chris Lee"
+git config --global user.email "sihrc.c.lee@gmail.com"
+
 ./scripts/deploy.sh

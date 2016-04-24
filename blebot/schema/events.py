@@ -29,13 +29,13 @@ class Event(Base):
         self.channel = channel_id
 
     def details(self):
-        return "\nEVENT #{number} - **{name}** at {date} created by *{created}*\n  Going: \t{going}".format(
+        return "\nEVENT #{number}\n**{name}** at {date}\n__{human}__\ncreated by *{created}*\n\t\tGoing: \t{going}".format(
             number=self.id,
             name=self.name,
-            date="{time} (__{human}__)".format(
+            date="{time}".format(
                 time=EASTERN.localize(self.date).strftime("%I:%M%p %Z on %a. %b %d"),
-                human=humanize.naturaltime(self.date)
             ),
+            human=humanize.naturaltime(self.date),
             going=", ".join(self.going) if self.going else "No one",
             created=self.created_by
         )
