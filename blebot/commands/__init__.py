@@ -1,5 +1,5 @@
 from .config import COMMANDS, ALLOWED, DEFAULT_MESSAGE
-from . import rsvp, help, enable, rsvp_list, rsvp_ditch, rsvp_create
+from . import rsvp, help, enable, rsvp_list, rsvp_ditch, rsvp_create, rsvp_delete
 from ..utils.auth import check_role
 from ..utils.error import BlebotError
 
@@ -28,6 +28,7 @@ def initialize():
             "rsvp": rsvp,
             "list": rsvp_list,
             "ditch": rsvp_ditch,
-            "create": rsvp_create
+            "create": rsvp_create,
+            "delete": rsvp_delete
         }
     )

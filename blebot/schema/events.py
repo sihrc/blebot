@@ -1,11 +1,14 @@
 from sqlalchemy import Column, Integer, String, DateTime
 import humanize
-from pytz import timezone
+import pytz
 
 from . import  Base
 from .datatypes import ArraySet
 
-EASTERN = timezone('US/Eastern')
+EASTERN = pytz.timezone("EST")
+UTC = pytz.timezone("UTC")
+def convert_to_est(datetime):
+    return UTC.localize(datetime).astimezone(EASTERN)
 
 class Event(Base):
     __tablename__ = "events"
@@ -33,7 +36,7 @@ class Event(Base):
             number=self.id,
             name=self.name,
             date="{time}".format(
-                time=EASTERN.localize(self.date).strftime("%I:%M%p %Z on %a. %b %d"),
+                time=convert_to_est(self.date).strftime("%I:%M%p %Z on %a. %b %d"),
             ),
             human=humanize.naturaltime(self.date),
             going=", ".join(self.going) if self.going else "No one",

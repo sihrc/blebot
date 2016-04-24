@@ -39,9 +39,9 @@ tz_str = '''-12 Y
 -4.5 HLV VET
 -9.5 MART MIT'''
 
+UTC_TIMEZONE = pytz.timezone('UTC')
 def convert_to_utc(dt_aware):
-    tz = pytz.timezone('UTC')
-    dt_my_tz = dt_aware.astimezone(tz)
+    dt_my_tz = dt_aware.astimezone(UTC_TIMEZONE)
     dt_naive = dt_my_tz.replace(tzinfo=None)
     return dt_naive
 

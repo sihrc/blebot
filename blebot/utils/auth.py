@@ -6,7 +6,8 @@ MODULES = {
     "list": "rsvp",
     "rsvp": "rsvp",
     "ditch": "rsvp",
-    "create": "rsvp"
+    "create": "rsvp",
+    "delete": "rsvp"
 }
 
 def check_role(command, message):
