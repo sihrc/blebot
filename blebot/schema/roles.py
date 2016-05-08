@@ -3,14 +3,14 @@ import json
 from sqlalchemy import Column, String
 
 from . import Base
-from .datatypes import ArraySet
+from .datatypes import ArrayList
 
 class Role(Base):
     __tablename__ = "roles"
 
     channel = Column("channel", String, primary_key=True)
     server = Column("server", String)
-    modules = Column("modules", ArraySet(String))
+    modules = Column("modules", ArrayList(String))
     extras = Column("extras", String)
 
     def __init__(self, server, channel, modules, extras=None):

@@ -37,7 +37,7 @@ def handle_action(command, action, args, message, role=None):
     if args in existing_role.modules:
         raise BlebotError("The module `{module}` already exists in that channel!".format(module = args))
 
-    existing_role.modules.add(args)
+    existing_role.modules.append(args)
     session.add(existing_role)
     session.commit()
     session.close()

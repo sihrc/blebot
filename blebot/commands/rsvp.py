@@ -1,6 +1,6 @@
 import traceback, re
 
-import datetime
+import datetime, pytz
 import dateutil.parser
 from sqlalchemy import and_
 
@@ -79,6 +79,8 @@ def _create(action, args, message):
     name, time = args.split("@")
     try:
         date = dateutil.parser.parse(time.upper().strip(), tzinfos=TZD)
+        if date.tzinfo is None or date.tzinfo.utcoffset(date) is None:
+            date = pytz.timezone("EST").localize(date)
         utc_date = convert_to_utc(date)
     except:
         traceback.print_exc()
@@ -140,9 +142,9 @@ def _going(action, args, message):
     if not event:
         raise BlebotError("Could not find event with number {number}".format(number=args))
 
-    if message.author.name not in event.going.add:
-        event.going.add(message.author.name)
-        
+    if message.author.name not in event.going:
+        event.going.append(message.author.name)
+
     session.commit()
     session.close()
     return [], "\n{name} registered as going!".format(name=message.author.name)
@@ -173,7 +175,7 @@ def _topic(args, message):
     if not topic:
         topic = Topic(message.server.id, message.channel.id, {})
     if args == "on":
-        topic.modules.add("rsvp")
+        topic.modules.append("rsvp")
         session.add(topic)
         session.commit()
         session.close()

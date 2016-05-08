@@ -3,7 +3,7 @@ import humanize
 import pytz
 
 from . import  Base
-from .datatypes import ArraySet
+from .datatypes import ArrayList
 
 EASTERN = pytz.timezone("EST")
 UTC = pytz.timezone("UTC")
@@ -16,7 +16,7 @@ class Event(Base):
     id = Column("id", Integer, primary_key=True)
     name = Column("name", String)
     created_by = Column("created_by", String)
-    going = Column("going", ArraySet(String))
+    going = Column("going", ArrayList(String))
     date = Column("time", DateTime)
     server = Column("column", String)
     channel = Column("channel", String)
@@ -30,7 +30,7 @@ class Event(Base):
         self.channel = channel_id
 
     def details(self):
-        return "\nEVENT #{number}\n**{name}** at {date}\n__{human}__\ncreated by *{created}*\n\t\tGoing({num_people}): \t{going}".format(
+        return "\nEVENT #{number}\n**{name}** at {date}\n__{human}__\ncreated by *{created}*\n\t\t{num_people} Going: \t{going}".format(
             number=self.id,
             name=self.name,
             date="{time}".format(
