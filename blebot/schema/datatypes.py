@@ -5,7 +5,7 @@ modmethods = ['add', 'clear', 'difference_update', 'discard',
               'symmetric_difference_update', 'update',
               '__ior__', '__iand__', '__isub__', '__ixor__']
 
-class MutableSet(Mutable, set):
+class MutableSet(Mutable, list):
     @classmethod
     def coerce(cls, key, value):
         if not isinstance(value, cls):

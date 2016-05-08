@@ -140,9 +140,9 @@ def _going(action, args, message):
     if not event:
         raise BlebotError("Could not find event with number {number}".format(number=args))
 
-    if message.author.name in event.maybe:
-        event.maybe.remove(message.author.name)
-    event.going.add(message.author.name)
+    if message.author.name not in event.going.add:
+        event.going.add(message.author.name)
+        
     session.commit()
     session.close()
     return [], "\n{name} registered as going!".format(name=message.author.name)
