@@ -158,9 +158,6 @@ def _ditch(action, args, message):
     event = session.query(Event).filter(and_(Event.id == int(args), Event.channel == message.channel.id)).first()
     if not event:
         raise BlebotError("Could not find event with number {number}".format(number=args))
-
-    if message.author.name in event.maybe:
-        event.maybe.remove(message.author.name)
     if message.author.name in event.going:
         event.going.remove(message.author.name)
     session.commit()
