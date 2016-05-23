@@ -21,6 +21,11 @@ def on_ready():
 
 @client.event
 @asyncio.coroutine
+def on_message_edit(before, after):
+    yield from on_message(after)
+    
+@client.event
+@asyncio.coroutine
 def on_message(message):
     text = message.content
     if not text.startswith("/"):
