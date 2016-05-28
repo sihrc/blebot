@@ -1,5 +1,6 @@
 from .config import COMMANDS, ALLOWED, DEFAULT_MESSAGE
-from . import rsvp, help, enable, rsvp_list, rsvp_ditch, rsvp_create, rsvp_delete
+from . import help, enable
+from .rsvp import rsvp, rsvp_list, rsvp_ditch, rsvp_create, rsvp_delete
 from ..utils.auth import check_role
 from ..utils.error import BlebotError
 

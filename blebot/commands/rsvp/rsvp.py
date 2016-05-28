@@ -4,12 +4,12 @@ import datetime, pytz
 import dateutil.parser
 from sqlalchemy import and_
 
-from ..schema import get_session
-from ..schema.events import Event
-from ..schema.topics import Topic
-from ..utils.error import BlebotError
-from ..utils.tzinfo import TZD, convert_to_utc
-from ..client import client
+from ...schema import get_session
+from ...schema.events import Event
+from ...schema.topics import Topic
+from ...utils.error import BlebotError
+from ...utils.tzinfo import TZD, convert_to_utc
+from ...client import client
 
 allowed_actions = ["create", "delete", "list", "going", "help", "details", "ditch", "topic"]
 def handle_help():
@@ -186,16 +186,5 @@ def _topic(args, message):
         return [future], "\nTopic updates for rsvp has been turned off!"
 
 def _edit_topic(channel, message, force=False):
-    # topic = channel.topic or ""
-    # if PRESTRING not in topic:
-    #     topic += "\n{prestring}\n{message}\n{poststring}".format(
-    #         prestring=PRESTRING,
-    #         message=message,
-    #         poststring=POSTSTRING
-    #     )
-    # else:
-    #     start = topic.find(PRESTRING) + len(PRESTRING)
-    #     end = topic.find(POSTSTRING)
-    #     topic = topic[:start] + message + topic[end + 1:]
     message = PRESTRING + message
     return client.edit_channel(channel, topic=message)

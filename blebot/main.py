@@ -23,7 +23,7 @@ def on_ready():
 @asyncio.coroutine
 def on_message_edit(before, after):
     yield from on_message(after)
-    
+
 @client.event
 @asyncio.coroutine
 def on_message(message):
